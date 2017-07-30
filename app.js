@@ -216,13 +216,14 @@ function receivedAuthentication(event) {
  * 
  */
 function firstEntity(nlp, name) {
+  console.log(nlp.entities[name]);
   return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
 }
 
 function handleMessage(senderID, message) {
   // check greeting is here and is confident
-  const greeting = firstEntity(message.nlp, 'greeting');
-  if (greeting && greeting.confidence > 0.8) {
+  const datetime = firstEntity(message.nlp, 'datetime');
+  if (datetime && datetime.confidence > 0.8) {
     sendTextMessage(senderID, 'Hi there!');
 		return;
   } else { 
