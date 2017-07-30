@@ -230,7 +230,7 @@ function handleMessage(senderID, message) {
 		var year = moment(datetime).format('YYYY');
 		var month = moment(datetime).format('M');
 		var day = moment(datetime).format('D');
-    request.get("https://api.gurbaninow.com/v2/hukamnama/" + year + "/" + month "/" + day, function(err, res, body) {  
+    request.get("https://api.gurbaninow.com/v2/hukamnama/" + year + "/" + month + "/" + day, function(err, res, body) {  
     	let json = JSON.parse(body);
     	console.log(json);
 		});
