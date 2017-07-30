@@ -241,7 +241,6 @@ function handleMessage(senderID, message) {
 		var month = moment(datetime).format('M');
 		var day = moment(datetime).format('D');
 		var url ="https://api.gurbaninow.com/v2/hukamnama/" + year + "/" + month + "/" + day;
-		sendTextMessage(senderID, url)
 		const options = {  
 			url: url,
 			method: 'GET',
@@ -254,7 +253,9 @@ function handleMessage(senderID, message) {
     request(options, function(err, res, body) {  
     	let json = JSON.parse(body);
 			console.log(json);
-			sendTextMessage(senderID, json["hukamnama"][0]["line"]["translation"]["english"]["default"]);
+			var hukamnama = json["hukamnama"];
+			for(var i = 0; i < hukamnama.length; i++)
+				sendTextMessage(senderID, json["hukamnama"][i]["line"]["translation"]["english"]["default"]);
 		});
 		return;
   } else { 
