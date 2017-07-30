@@ -223,6 +223,16 @@ function firstEntity(nlp, name) {
 		return false;
 }
 
+const options = {  
+    url: 'https://www.reddit.com/r/funny.json',
+    method: 'GET',
+    headers: {
+        'Accept': 'application/json',
+        'Accept-Charset': 'utf-8',
+        'User-Agent': 'messenger-bot'
+    }
+};
+
 function handleMessage(senderID, message) {
   // check greeting is here and is confident
   const datetime = firstEntity(message.nlp, 'datetime');
@@ -232,9 +242,19 @@ function handleMessage(senderID, message) {
 		var day = moment(datetime).format('D');
 		var url ="https://api.gurbaninow.com/v2/hukamnama/" + year + "/" + month + "/" + day;
 		sendTextMessage(senderID, url)
-    request.get(url, function(err, res, body) {  
+		const options = {  
+			url: url,
+			method: 'GET',
+			headers: {
+					'Accept': 'application/json',
+					'Accept-Charset': 'utf-8',
+					'User-Agent': 'messenger-bot'
+			}
+		};
+    request(options, function(err, res, body) {  
     	let json = JSON.parse(body);
-			sendTextMessage(senderID, JSON.stringify(json));
+			console.log(json);
+			sendTextMessage(senderID, json["hukamnama"][0]["line"]["translation"]["english"]["default"]);
 		});
 		return;
   } else { 
