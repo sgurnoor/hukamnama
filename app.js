@@ -16,7 +16,8 @@ const
   config = require('config'),
   express = require('express'),
   https = require('https'),  
-  request = require('request');
+  request = require('request'),
+	moment = require('moment');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -216,20 +217,29 @@ function receivedAuthentication(event) {
  * 
  */
 function firstEntity(nlp, name) {
-  console.log(nlp.entities[name]);
-  return nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
+ 	if(nlp && nlp.entities && nlp.entities && nlp.entities[name] && nlp.entities[name][0])
+		return nlp.entities[name][0]["value"];
+	else
+		return false;
 }
 
 function handleMessage(senderID, message) {
   // check greeting is here and is confident
   const datetime = firstEntity(message.nlp, 'datetime');
-  if (datetime && datetime.confidence > 0.8) {
-    sendTextMessage(senderID, 'Hi there!');
+  if (datetime) {
+		var year = moment(datetime).format('YYYY');
+		var month = moment(datetime).format('M');
+		var day = moment(datetime).format('D');
+    request.get("https://api.gurbaninow.com/v2/hukamnama/" + year + "/" + month "/" + day, function(err, res, body) {  
+    	let json = JSON.parse(body);
+    	console.log(json);
+		});
 		return;
   } else { 
-    sendTextMessage(senderID, 'Bye!');
+    sendTextMessage(senderID, 'Enter a valid date');
   }
 }
+
 
 function receivedMessage(event) {
   var senderID = event.sender.id;
