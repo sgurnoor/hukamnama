@@ -254,9 +254,11 @@ function handleMessage(senderID, message) {
     	let json = JSON.parse(body);
 			console.log(json);
 			var hukamnama = json["hukamnama"];
-			var hukam = "";
+			var hukam = [];
 			for(var i = 0; i < hukamnama.length; i++)
-				sendTextMessage(senderID, json["hukamnama"][i]["line"]["translation"]["english"]["default"]);
+				hukam.push(json["hukamnama"][i]["line"]["translation"]["english"]["default"]);
+			for(var i = 0; i < hukam.length; i++)
+				sendTextMessage(senderID, hukam[i]);
 		});
 		return;
   } else { 
